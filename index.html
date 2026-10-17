@@ -1,16 +1,29 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Portal de Questionários</title><style>
 :root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#12233d;background:#eef3fb}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#102b57,#196ba7);color:white;padding:24px max(22px,calc((100vw - 1020px)/2));display:flex;align-items:center;justify-content:space-between;gap:10px}header h1{font-size:23px;margin:0}header small{opacity:.8}main{max-width:1030px;margin:30px auto;padding:0 17px}.card{background:white;border-radius:18px;padding:25px;box-shadow:0 9px 26px #15365b12;margin-bottom:18px}h2{font-size:21px;margin:0 0 19px}h3{margin:0 0 14px;font-size:17px}label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px;color:#456079}input,select{width:100%;padding:12px 13px;border:1px solid #cbd8e7;border-radius:9px;background:#fff;font:inherit}input[type=file]{padding:9px}button{padding:12px 16px;border:0;border-radius:10px;background:#1467af;color:white;font:inherit;font-weight:700;cursor:pointer}button:hover{filter:brightness(.96)}button:disabled{opacity:.65;cursor:wait}button.is-loading{display:inline-flex;align-items:center;justify-content:center;gap:9px;pointer-events:none}.btn-spinner{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;flex:none;animation:btn-spin .7s linear infinite}@keyframes btn-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.btn-spinner{animation-duration:1.7s}}.secondary{background:#e5eff9;color:#164f80}.danger{background:#bd4050}.muted{color:#62758b;font-size:14px}.hidden{display:none!important}.narrow{max-width:430px;margin:65px auto}.stack{display:grid;gap:13px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.pill{border-radius:20px;padding:6px 12px;background:#e6f2fe;color:#15578b;font-size:12px;font-weight:bold}.quizcard{border:1px solid #d7e3f0;border-radius:12px;padding:16px;margin:12px 0}.quizcard strong{display:block;margin-bottom:8px}.option{display:flex;align-items:flex-start;gap:12px;border:1px solid #dae3ed;border-radius:9px;padding:12px;margin:9px 0;cursor:pointer}.option input{width:auto;margin-top:4px;accent-color:#1467af}.hint{background:#fff8e1;padding:12px;border-left:4px solid #e0ae35;border-radius:7px;white-space:pre-line;margin-top:10px}.stat{background:#f0f6fd;padding:18px;border-radius:12px;flex:1;min-width:130px}.stat b{display:block;font-size:25px;color:#11558c}.stats{display:flex;flex-wrap:wrap;gap:11px;margin:15px 0}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:10px;border-bottom:1px solid #e5edf5}th{color:#526d88}.scroll{overflow:auto}#toast{position:fixed;bottom:23px;right:20px;background:#163352;color:#fff;padding:15px 20px;border-radius:12px;box-shadow:0 8px 35px #0003;max-width:400px;z-index:5}.warn{color:#9f5723;font-size:13px}@media(max-width:700px){.cols{grid-template-columns:1fr}header{padding:18px}header h1{font-size:18px}.card{padding:18px}}
+
+/* Navegação por cartões: uma questão visível de cada vez. */
+#quizArea .card{max-width:820px;margin-left:auto;margin-right:auto}
+.quizcard.single-question{margin:19px 0;border:1px solid #cfdfef;padding:clamp(16px,3vw,26px);background:#fff;min-height:230px}
+.quizcard.single-question strong{font-size:17px;line-height:1.55;margin-bottom:20px}
+.quizcard.single-question .option{transition:background .15s,border-color .15s}
+.quizcard.single-question .option:has(input:checked){border-color:#1467af;background:#e9f4ff}
+.feedback{margin-top:16px;padding:16px;border-radius:11px;border:1px solid #bed6eb;background:#eff7ff;white-space:pre-line;line-height:1.55}.feedback.ok{background:#ecf9f1;border-color:#9cd9b1}.feedback.no{background:#fff4ef;border-color:#efbaa6}.confirm-line{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}.confirmed-label{font-weight:700;color:#32627e;font-size:13px}.quiz-navigation{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap}
+.quiz-navigation button{min-width:135px}
+.quiz-counter{font-size:13px;color:#56708b;font-weight:700;text-align:center}
+.quiz-progressbar{height:7px;border-radius:20px;background:#e4edf7;overflow:hidden;margin:15px 0}
+.quiz-progressbar>div{height:100%;background:#1467af;transition:width .2s}
+@media(max-width:480px){.quiz-navigation button{min-width:0;flex:1}.quiz-counter{order:-1;width:100%}}
 </style></head><body><header><div><h1>📘 Portal de Questionários</h1><small>Aprendizagem e avaliação interativa</small></div><div id="who"></div></header><main>
 <section id="loginArea" class="card narrow"><h2>Acessar o sistema</h2><form id="loginForm"><label>Usuário</label><input id="login" autocomplete="username" required><label>Senha</label><input id="senha" type="password" autocomplete="current-password" required><p><button type="submit" id="loginBtn" style="width:100%">Entrar</button></p></form><p class="muted">Contas dos alunos são criadas pelo professor.</p></section>
-<section id="profArea" class="hidden"><div class="between"><h2>Painel do professor</h2><button class="secondary" onclick="logout(this)">Sair</button></div><div class="cols"><div class="card"><h3>📤 Importar questionário Gemini</h3><form id="importForm"><label>Matéria</label><input id="materia" placeholder="Ex.: Matemática" required><label>Nome do conteúdo</label><input id="conteudo" placeholder="Ex.: Equações do 1º grau" required><label>Arquivo JSON</label><input id="arquivo" type="file" accept=".json,application/json" required><p class="muted">Aceita listas de questões com alternativas, resposta correta e dica.</p><button type="submit">Importar para o Google Drive</button></form></div><div class="card"><h3>👤 Cadastrar aluno</h3><form id="alunoForm"><label>Nome</label><input id="alunoNome" required><label>Login</label><input id="alunoLogin" required><label>Senha inicial (mínimo 8 caracteres)</label><input id="alunoSenha" type="password" minlength="8" required><p><button type="submit">Criar conta</button></p></form></div></div><div class="card"><div class="between"><h3>📚 Questionários cadastrados</h3><button class="secondary" onclick="atualizarProfessor(this)">Atualizar</button></div><div id="profQuizzes" class="stack muted">Carregando...</div></div><div class="card"><h3>📊 Resultados dos alunos</h3><div id="resultados" class="scroll"></div></div></section>
-<section id="alunoArea" class="hidden"><div class="between"><h2>Escolha seu questionário</h2><button class="secondary" onclick="logout(this)">Sair</button></div><div class="card"><label>Matéria</label><select id="filtroMateria" onchange="renderConteudos()"></select><label>Conteúdo</label><select id="filtroConteudo"></select><p><button onclick="comecar(this)">Iniciar questões</button></p></div><div class="card"><h3>Orientações</h3><p class="muted">Suas respostas são salvas à medida que você avança. Use “Exibir dica” quando precisar. Ao finalizar, você verá o resultado.</p><p class="warn">Durante a avaliação, o sistema registra quando esta página fica oculta. Ele não identifica outros sites ou aplicativos.</p></div></section>
-<section id="quizArea" class="hidden"><div class="card"><div class="between"><div><h2 id="quizTitulo"></h2><span id="progresso" class="pill"></span></div><button class="danger" onclick="finalizar(this)">Finalizar tentativa</button></div><div id="questoes"></div><p><button class="secondary" onclick="finalizar(this)">Encerrar e ver resultado</button></p></div></section>
+<section id="profArea" class="hidden"><div class="between"><h2>Painel do professor</h2><button class="secondary" onclick="logout(this)">Sair</button></div><div class="cols"><div class="card"><h3>📤 Importar questionário Gemini</h3><form id="importForm"><label>Matéria</label><input id="materia" placeholder="Ex.: Matemática" required><label>Nome do conteúdo</label><input id="conteudo" placeholder="Ex.: Equações do 1º grau" required><label>Arquivo JSON</label><input id="arquivo" type="file" accept=".json,application/json" required><p class="muted">Aceita questões com alternativas, resposta correta, dica e explicação da resposta.</p><button type="submit">Importar para o Google Drive</button></form></div><div class="card"><h3>👤 Cadastrar aluno</h3><form id="alunoForm"><label>Nome</label><input id="alunoNome" required><label>Login</label><input id="alunoLogin" required><label>Senha inicial (mínimo 8 caracteres)</label><input id="alunoSenha" type="password" minlength="8" required><p><button type="submit">Criar conta</button></p></form></div></div><div class="card"><div class="between"><h3>📚 Questionários cadastrados</h3><button class="secondary" onclick="atualizarProfessor(this)">Atualizar</button></div><div id="profQuizzes" class="stack muted">Carregando...</div></div><div class="card"><h3>📊 Resultados dos alunos</h3><div id="resultados" class="scroll"></div></div></section>
+<section id="alunoArea" class="hidden"><div class="between"><h2>Escolha seu questionário</h2><button class="secondary" onclick="logout(this)">Sair</button></div><div class="card"><label>Matéria</label><select id="filtroMateria" onchange="renderConteudos()"></select><label>Conteúdo</label><select id="filtroConteudo"></select><p><button onclick="comecar(this)">Iniciar questões</button></p></div><div class="card"><h3>Orientações</h3><p class="muted">Selecione uma alternativa e clique em “Confirmar resposta” para salvá-la e visualizar a explicação. Você pode avançar ou voltar sem responder; após confirmar, não será possível alterar a resposta. Ao finalizar, verá o resultado.</p><p class="warn">Durante a avaliação, o sistema registra quando esta página fica oculta. Ele não identifica outros sites ou aplicativos.</p></div></section>
+<section id="quizArea" class="hidden"><div class="card"><div class="between"><div><h2 id="quizTitulo"></h2><span id="progresso" class="pill"></span></div><button class="danger" onclick="finalizar(this)">Finalizar tentativa</button></div><div class="quiz-progressbar" aria-hidden="true"><div id="barraProgresso" style="width:0%"></div></div><div id="questoes"></div><div class="quiz-navigation"><button id="btnAnterior" type="button" class="secondary" onclick="navegarQuestao(-1,this)">← Anterior</button><span id="contadorQuestao" class="quiz-counter"></span><button id="btnProxima" type="button" onclick="navegarQuestao(1,this)">Próxima →</button></div><p><button class="secondary" onclick="finalizar(this)">Encerrar e ver resultado</button></p></div></section>
 <section id="fimArea" class="hidden"><div class="card"><h2>🏆 Resultado do questionário</h2><p id="fimDescricao"></p><div id="fimStats" class="stats"></div><p><button onclick="voltarAluno(this)">Responder outro conteúdo</button></p></div></section>
 </main><div id="toast" class="hidden"></div><script>
 // Cole abaixo a URL da implantação WEB APP (/exec) do Google Apps Script.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw67hvHD24pWiGAcF4OiSDQoJUMxXvITuBI3WfzGecufjT8TUmyoGw_-iuMxol0hImm/exec';
 let token=sessionStorage.getItem('quizToken')||'',user=null,quizzes=[],tentativa=null,questoes=[],escolhas={};
-let pendingAnswers=Promise.resolve();
+let pendingAnswers=Promise.resolve(),indiceQuestao=0,dicasAbertas=new Set(),confirmacoes={},confirmando=new Set();
 const $=x=>document.getElementById(x);const show=id=>['loginArea','profArea','alunoArea','quizArea','fimArea'].forEach(x=>$(x).classList.toggle('hidden',x!==id));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function notice(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(notice.timer);notice.timer=setTimeout(()=>$('toast').classList.add('hidden'),4800)}
@@ -62,10 +75,62 @@ async function carregarProfessor(){const [q,r]=await Promise.all([api('listarQui
 function atualizarProfessor(btn){return acaoBotao(btn,'Carregando...',()=>carregarProfessor())}
 async function carregarQuizzes(){quizzes=await api('listarQuizzes',token);let materias=[...new Set(quizzes.map(q=>q.materia))].sort((a,b)=>a.localeCompare(b,'pt-BR'));$('filtroMateria').innerHTML=materias.map(m=>'<option value="'+esc(m)+'">'+esc(m)+'</option>').join('');renderConteudos()}
 function renderConteudos(){const m=$('filtroMateria').value;$('filtroConteudo').innerHTML=quizzes.filter(q=>q.materia===m).map(q=>'<option value="'+esc(q.id)+'">'+esc(q.conteudo)+' ('+q.total+' questões)</option>').join('')}
-function comecar(btn){acaoBotao(btn,'Carregando...',async()=>{pendingAnswers=Promise.resolve();const id=$('filtroConteudo').value;if(!id)throw Error('Nenhum conteúdo disponível.');const r=await api('iniciarQuiz',token,id);tentativa=r.tentativaId;questoes=r.questoes;escolhas={};$('quizTitulo').textContent=r.materia+' — '+r.conteudo;show('quizArea');renderQuestoes()})}
-function renderQuestoes(){const feitas=Object.keys(escolhas).length;$('progresso').textContent=feitas+' de '+questoes.length+' respondidas';$('questoes').innerHTML=questoes.map((q,i)=>'<div class="quizcard"><strong>Questão '+(i+1)+' — '+esc(q.enunciado)+'</strong>'+q.opcoes.map((o,j)=>'<label class="option"><input type="radio" name="q'+esc(q.id)+'" value="'+j+'" '+(escolhas[q.id]===j?'checked':'')+' onchange="marcar('+i+','+j+')"><span>'+String.fromCharCode(65+j)+') '+esc(o)+'</span></label>').join('')+(q.dica?'<button type="button" class="secondary" onclick="alternarDica('+i+',this)">💡 Exibir / ocultar dica</button><div class="hint hidden" id="dica'+i+'">'+esc(q.dica)+'</div>':'')+'</div>').join('')}
-async function alternarDica(i,btn){await acaoBotao(btn,'Carregando...',async()=>{ $('dica'+i).classList.toggle('hidden'); await new Promise(resolve=>setTimeout(resolve,240)); })}
-function marcar(i,j){const q=questoes[i];escolhas[q.id]=j;$('progresso').textContent=Object.keys(escolhas).length+' de '+questoes.length+' respondidas';pendingAnswers=pendingAnswers.catch(()=>{}).then(()=>api('responder',token,tentativa,q.id,j));pendingAnswers.catch(e=>notice('⚠️ Não foi possível salvar a resposta: '+e.message));}
+function comecar(btn){acaoBotao(btn,'Carregando...',async()=>{pendingAnswers=Promise.resolve();const id=$('filtroConteudo').value;if(!id)throw Error('Nenhum conteúdo disponível.');const r=await api('iniciarQuiz',token,id);tentativa=r.tentativaId;questoes=r.questoes;escolhas={};confirmacoes={};confirmando.clear();indiceQuestao=0;dicasAbertas.clear();$('quizTitulo').textContent=r.materia+' — '+r.conteudo;show('quizArea');renderQuestoes()})}
+function atualizarProgresso(){
+ const feitas=questoes.filter(q=>Object.prototype.hasOwnProperty.call(confirmacoes,q.id)).length;
+ $('progresso').textContent=feitas+' de '+questoes.length+' respondidas';
+ $('barraProgresso').style.width=(questoes.length?100*feitas/questoes.length:0)+'%';
+ $('contadorQuestao').textContent='Questão '+(indiceQuestao+1)+' de '+questoes.length;
+}
+function renderQuestoes(){
+ if(!questoes.length){$('questoes').textContent='Nenhuma questão disponível.';$('btnAnterior').disabled=true;$('btnProxima').disabled=true;return;}
+ indiceQuestao=Math.max(0,Math.min(indiceQuestao,questoes.length-1));
+ const i=indiceQuestao,q=questoes[i],res=confirmacoes[q.id],bloqueada=!!res||confirmando.has(q.id);
+ const feedback=res?'<div class="feedback '+(res.acertou?'ok':'no')+'" role="status"><strong>'+(res.acertou?'✅ Você acertou!':'❌ Resposta incorreta')+'</strong><div><b>Resposta correta:</b> '+esc(String.fromCharCode(65+res.indiceCorreto)+') '+q.opcoes[res.indiceCorreto])+'</div><div style="margin-top:9px"><b>Explicação:</b> '+esc(res.explicacao||'Não há explicação cadastrada para esta questão.')+'</div></div>':'';
+ $('questoes').innerHTML='<div class="quizcard single-question"><strong>Questão '+(i+1)+' — '+esc(q.enunciado)+'</strong>'+
+ q.opcoes.map((o,j)=>'<label class="option"><input type="radio" name="questaoAtual" value="'+j+'" '+(escolhas[q.id]===j?'checked':'')+' '+(bloqueada?'disabled':'')+' onchange="marcar('+i+','+j+')"><span>'+String.fromCharCode(65+j)+') '+esc(o)+'</span></label>').join('')+
+ (q.dica?'<button type="button" class="secondary" onclick="alternarDica('+i+',this)">💡 '+(dicasAbertas.has(i)?'Ocultar dica':'Exibir dica')+'</button><div class="hint '+(dicasAbertas.has(i)?'':'hidden')+'" id="dica'+i+'">'+esc(q.dica)+'</div>':'')+
+ '<div class="confirm-line">'+(res?'<span class="confirmed-label">✓ Resposta confirmada e salva</span>':'<button id="btnConfirmar" type="button" '+(escolhas[q.id]===undefined||bloqueada?'disabled':'')+' onclick="confirmarResposta('+i+',this)">Confirmar resposta</button><span class="muted">Você pode pular esta questão e responder depois.</span>')+'</div>'+feedback+'</div>';
+ $('btnAnterior').disabled=i===0;
+ $('btnProxima').disabled=i===questoes.length-1;
+ atualizarProgresso();
+}
+function navegarQuestao(direcao,btn){
+ const proximo=indiceQuestao+direcao;
+ if(proximo<0||proximo>=questoes.length)return;
+ // A navegação é local e instantânea; salvar respostas continua em paralelo.
+ indiceQuestao=proximo;renderQuestoes();
+ $('quizTitulo').scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function alternarDica(i,btn){await acaoBotao(btn,'Carregando...',async()=>{
+ if(dicasAbertas.has(i))dicasAbertas.delete(i);else dicasAbertas.add(i);
+ $('dica'+i).classList.toggle('hidden',!dicasAbertas.has(i));
+ await new Promise(resolve=>setTimeout(resolve,160));
+ // Atualiza o texto do botão, preservando o controle de carregamento.
+ });if(btn && btn.isConnected)btn.textContent='💡 '+(dicasAbertas.has(i)?'Ocultar dica':'Exibir dica');
+}
+function marcar(i,j){
+ const q=questoes[i];if(!q||confirmacoes[q.id]||confirmando.has(q.id))return;
+ escolhas[q.id]=j;
+ const btn=$('btnConfirmar');if(btn)btn.disabled=false;
+}
+function confirmarResposta(i,btn){
+ const q=questoes[i];if(!q||confirmacoes[q.id]||confirmando.has(q.id))return;
+ const indice=escolhas[q.id];if(!Number.isInteger(indice)){notice('Selecione uma alternativa para confirmar.');return;}
+ confirmando.add(q.id);
+ const requisicao=api('responder',token,tentativa,q.id,indice).then(r=>{
+   confirmacoes[q.id]=r;atualizarProgresso();
+   if(indiceQuestao===i)renderQuestoes();
+   return r;
+ }).catch(e=>{notice('⚠️ Não foi possível confirmar a resposta: '+e.message);throw e;}).finally(()=>{
+   confirmando.delete(q.id);if(indiceQuestao===i&&!confirmacoes[q.id])renderQuestoes();
+ });
+ // Mantém todas as confirmações pendentes antes da finalização.
+ pendingAnswers=Promise.allSettled([pendingAnswers.catch(()=>{}),requisicao]).then(resultados=>{
+   const erro=resultados.find(r=>r.status==='rejected');if(erro)throw erro.reason;
+ });
+ return acaoBotao(btn,'Salvando...',()=>requisicao);
+}
 let finalizando=false;
 function finalizar(btn){if(!tentativa||finalizando)return;if(!confirm('Finalizar agora? Questões em branco serão contabilizadas como não respondidas.'))return;finalizando=true;const botoesFinalizar=[...$('quizArea').querySelectorAll('button')].filter(b=>b!==btn&&/^(Finalizar tentativa|Encerrar e ver resultado)$/.test(b.textContent.trim()));botoesFinalizar.forEach(b=>b.disabled=true);return acaoBotao(btn,'Finalizando...',async()=>{await pendingAnswers;const r=await api('finalizarQuiz',token,tentativa);tentativa=null;show('fimArea');$('fimDescricao').textContent=r.materia+' — '+r.conteudo;$('fimStats').innerHTML=[['Total',r.total],['Respondidas',r.respondidas],['Acertos',r.acertos],['Erros',r.erros],['Em branco',r.naoRespondidas],['Saídas da aba',r.saidasDeAba]].map(x=>'<div class="stat"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}).finally(()=>{finalizando=false;botoesFinalizar.forEach(b=>b.disabled=false)})}
 async function voltarAluno(btn){await acaoBotao(btn,'Carregando...',async()=>{await carregarQuizzes();show('alunoArea')})}
