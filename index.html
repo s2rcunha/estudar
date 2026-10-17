@@ -23,7 +23,7 @@
 // Cole abaixo a URL da implantação WEB APP (/exec) do Google Apps Script.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw67hvHD24pWiGAcF4OiSDQoJUMxXvITuBI3WfzGecufjT8TUmyoGw_-iuMxol0hImm/exec';
 let token=sessionStorage.getItem('quizToken')||'',user=null,quizzes=[],tentativa=null,questoes=[],escolhas={};
-let pendingAnswers=Promise.resolve(),indiceQuestao=0,dicasAbertas=new Set(),confirmacoes={},confirmando=new Set();
+let pendingAnswers=Promise.resolve(),indiceQuestao=0,dicasAbertas=new Set(),confirmacoes={},confirmando=new Set(),explicacoesVisiveis=new Set();
 const $=x=>document.getElementById(x);const show=id=>['loginArea','profArea','alunoArea','quizArea','fimArea'].forEach(x=>$(x).classList.toggle('hidden',x!==id));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function notice(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(notice.timer);notice.timer=setTimeout(()=>$('toast').classList.add('hidden'),4800)}
@@ -71,11 +71,25 @@ async function home(){if(user.perfil==='professor'){show('profArea');await carre
 async function logout(btn){if(tentativa&&!confirm('Sua tentativa está em andamento. Sair sem finalizar?'))return;await acaoBotao(btn,'Saindo...',async()=>{try{await api('sair',token)}catch(e){notice('⚠️ Não foi possível confirmar a saída no servidor.')}token='';user=null;tentativa=null;sessionStorage.removeItem('quizToken');header();show('loginArea')})}
 $('alunoForm').onsubmit=e=>{e.preventDefault();acaoBotao(e.submitter,'Salvando...',async()=>{const r=await api('cadastrarAluno',token,$('alunoNome').value,$('alunoLogin').value,$('alunoSenha').value);notice('Conta criada: '+r.login);$('alunoForm').reset()})};
 $('importForm').onsubmit=e=>{e.preventDefault();acaoBotao(e.submitter,'Importando...',async()=>{const file=$('arquivo').files[0];if(!file)throw Error('Selecione um arquivo JSON.');const txt=await file.text();const result=await api('importarQuiz',token,$('materia').value,$('conteudo').value,txt);notice('Importado: '+result.total+' questões em '+result.conteudo);$('importForm').reset();await carregarProfessor()})};
-async function carregarProfessor(){const [q,r]=await Promise.all([api('listarQuizzes',token),api('listarResultados',token)]);$('profQuizzes').innerHTML=q.length?q.map(x=>'<div class="quizcard"><strong>'+esc(x.materia)+' — '+esc(x.conteudo)+'</strong>'+x.total+' questões</div>').join(''):'Nenhum questionário importado.';$('resultados').innerHTML=r.length?'<table><thead><tr><th>Aluno</th><th>Matéria / Conteúdo</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Saídas da aba</th></tr></thead><tbody>'+r.map(x=>'<tr><td>'+esc(x.aluno)+'</td><td>'+esc(x.materia)+' / '+esc(x.conteudo)+'</td><td>'+x.respondidas+'/'+x.total+'</td><td>'+x.acertos+'</td><td>'+x.erros+'</td><td>'+x.saidasDeAba+'</td></tr>').join('')+'</tbody></table>':'Nenhum resultado finalizado.'}
+async function carregarProfessor(){const [q,r]=await Promise.all([api('listarQuizzes',token),api('listarResultados',token)]);$('profQuizzes').innerHTML=q.length?q.map(x=>'<div class="quizcard"><strong>'+esc(x.materia)+' — '+esc(x.conteudo)+'</strong>'+x.total+' questões <button type="button" class="danger" style="margin-left:12px" data-excluir-quiz="'+esc(x.id)+'" aria-label="Excluir questionário '+esc(x.conteudo)+'">Excluir</button></div>').join(''):'Nenhum questionário importado.';$('resultados').innerHTML=r.length?'<table><thead><tr><th>Aluno</th><th>Matéria / Conteúdo</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Saídas da aba</th></tr></thead><tbody>'+r.map(x=>'<tr><td>'+esc(x.aluno)+'</td><td>'+esc(x.materia)+' / '+esc(x.conteudo)+'</td><td>'+x.respondidas+'/'+x.total+'</td><td>'+x.acertos+'</td><td>'+x.erros+'</td><td>'+x.saidasDeAba+'</td></tr>').join('')+'</tbody></table>':'Nenhum resultado finalizado.'}
+// Delegação de eventos: os botões são recriados ao atualizar a lista.
+$('profQuizzes').addEventListener('click',e=>{
+ const btn=e.target.closest('button[data-excluir-quiz]');
+ if(!btn)return;
+ const id=btn.dataset.excluirQuiz;
+ const item=btn.closest('.quizcard');
+ const nome=item?.querySelector('strong')?.textContent||'este questionário';
+ if(!confirm('Excluir "'+nome+'" da lista de questionários?\n\nOs alunos não terão mais acesso a ele. Os resultados já finalizados serão preservados.'))return;
+ acaoBotao(btn,'Excluindo...',async()=>{
+   await api('excluirQuiz',token,id);
+   notice('Questionário excluído da lista.');
+   await carregarProfessor();
+ });
+});
 function atualizarProfessor(btn){return acaoBotao(btn,'Carregando...',()=>carregarProfessor())}
 async function carregarQuizzes(){quizzes=await api('listarQuizzes',token);let materias=[...new Set(quizzes.map(q=>q.materia))].sort((a,b)=>a.localeCompare(b,'pt-BR'));$('filtroMateria').innerHTML=materias.map(m=>'<option value="'+esc(m)+'">'+esc(m)+'</option>').join('');renderConteudos()}
 function renderConteudos(){const m=$('filtroMateria').value;$('filtroConteudo').innerHTML=quizzes.filter(q=>q.materia===m).map(q=>'<option value="'+esc(q.id)+'">'+esc(q.conteudo)+' ('+q.total+' questões)</option>').join('')}
-function comecar(btn){acaoBotao(btn,'Carregando...',async()=>{pendingAnswers=Promise.resolve();const id=$('filtroConteudo').value;if(!id)throw Error('Nenhum conteúdo disponível.');const r=await api('iniciarQuiz',token,id);tentativa=r.tentativaId;questoes=r.questoes;escolhas={};confirmacoes={};confirmando.clear();indiceQuestao=0;dicasAbertas.clear();$('quizTitulo').textContent=r.materia+' — '+r.conteudo;show('quizArea');renderQuestoes()})}
+function comecar(btn){acaoBotao(btn,'Carregando...',async()=>{pendingAnswers=Promise.resolve();const id=$('filtroConteudo').value;if(!id)throw Error('Nenhum conteúdo disponível.');const r=await api('iniciarQuiz',token,id);tentativa=r.tentativaId;questoes=r.questoes;escolhas={};confirmacoes={};confirmando.clear();explicacoesVisiveis.clear();indiceQuestao=0;dicasAbertas.clear();$('quizTitulo').textContent=r.materia+' — '+r.conteudo;show('quizArea');renderQuestoes()})}
 function atualizarProgresso(){
  const feitas=questoes.filter(q=>Object.prototype.hasOwnProperty.call(confirmacoes,q.id)).length;
  $('progresso').textContent=feitas+' de '+questoes.length+' respondidas';
@@ -86,7 +100,10 @@ function renderQuestoes(){
  if(!questoes.length){$('questoes').textContent='Nenhuma questão disponível.';$('btnAnterior').disabled=true;$('btnProxima').disabled=true;return;}
  indiceQuestao=Math.max(0,Math.min(indiceQuestao,questoes.length-1));
  const i=indiceQuestao,q=questoes[i],res=confirmacoes[q.id],bloqueada=!!res||confirmando.has(q.id);
- const feedback=res?'<div class="feedback '+(res.acertou?'ok':'no')+'" role="status"><strong>'+(res.acertou?'✅ Você acertou!':'❌ Resposta incorreta')+'</strong><div><b>Resposta correta:</b> '+esc(String.fromCharCode(65+res.indiceCorreto)+') '+q.opcoes[res.indiceCorreto])+'</div><div style="margin-top:9px"><b>Explicação:</b> '+esc(res.explicacao||'Não há explicação cadastrada para esta questão.')+'</div></div>':'';
+ const explicacaoDisponivel=Object.prototype.hasOwnProperty.call(q,'explicacao');
+ const explicacao=explicacaoDisponivel?q.explicacao:(res?.explicacao||'');
+ const feedback=res?'<div class="feedback '+(res.acertou?'ok':'no')+'" role="status"><strong>'+(res.acertou?'✅ Você acertou!':'❌ Resposta incorreta')+'</strong><div><b>Resposta correta:</b> '+esc(String.fromCharCode(65+res.indiceCorreto)+') '+q.opcoes[res.indiceCorreto])+'</div><div style="margin-top:9px"><b>Explicação:</b> '+esc(explicacao||'Não há explicação cadastrada para esta questão.')+'</div></div>':
+ (explicacoesVisiveis.has(q.id)?'<div class="feedback" role="status"><div><b>Explicação:</b> '+esc(explicacao||'Não há explicação cadastrada para esta questão.')+'</div><div class="muted" style="margin-top:9px">⏳ Salvando sua resposta e conferindo o resultado...</div></div>':'');
  $('questoes').innerHTML='<div class="quizcard single-question"><strong>Questão '+(i+1)+' — '+esc(q.enunciado)+'</strong>'+
  q.opcoes.map((o,j)=>'<label class="option"><input type="radio" name="questaoAtual" value="'+j+'" '+(escolhas[q.id]===j?'checked':'')+' '+(bloqueada?'disabled':'')+' onchange="marcar('+i+','+j+')"><span>'+String.fromCharCode(65+j)+') '+esc(o)+'</span></label>').join('')+
  (q.dica?'<button type="button" class="secondary" onclick="alternarDica('+i+',this)">💡 '+(dicasAbertas.has(i)?'Ocultar dica':'Exibir dica')+'</button><div class="hint '+(dicasAbertas.has(i)?'':'hidden')+'" id="dica'+i+'">'+esc(q.dica)+'</div>':'')+
@@ -118,11 +135,26 @@ function confirmarResposta(i,btn){
  const q=questoes[i];if(!q||confirmacoes[q.id]||confirmando.has(q.id))return;
  const indice=escolhas[q.id];if(!Number.isInteger(indice)){notice('Selecione uma alternativa para confirmar.');return;}
  confirmando.add(q.id);
+ // A explicação já foi carregada ao iniciar o quiz: exibição local imediata.
+ explicacoesVisiveis.add(q.id);
+ if(indiceQuestao===i){
+   const card=$('questoes').querySelector('.single-question');
+   if(card){
+     const painel=document.createElement('div');painel.className='feedback';painel.setAttribute('role','status');
+     const titulo=document.createElement('b');titulo.textContent='Explicação:';
+     const conteudo=document.createElement('div');conteudo.style.whiteSpace='pre-line';
+     conteudo.textContent=q.explicacao||'Não há explicação cadastrada para esta questão.';
+     const salvando=document.createElement('div');salvando.className='muted';salvando.style.marginTop='9px';
+     salvando.textContent='⏳ Salvando sua resposta e conferindo o resultado...';
+     painel.append(titulo,conteudo,salvando);card.appendChild(painel);
+     card.querySelectorAll('input[type="radio"]').forEach(el=>el.disabled=true);
+   }
+ }
  const requisicao=api('responder',token,tentativa,q.id,indice).then(r=>{
    confirmacoes[q.id]=r;atualizarProgresso();
    if(indiceQuestao===i)renderQuestoes();
    return r;
- }).catch(e=>{notice('⚠️ Não foi possível confirmar a resposta: '+e.message);throw e;}).finally(()=>{
+ }).catch(e=>{explicacoesVisiveis.delete(q.id);notice('⚠️ Não foi possível confirmar a resposta: '+e.message);throw e;}).finally(()=>{
    confirmando.delete(q.id);if(indiceQuestao===i&&!confirmacoes[q.id])renderQuestoes();
  });
  // Mantém todas as confirmações pendentes antes da finalização.
