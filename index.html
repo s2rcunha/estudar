@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Portal de Questionários</title><style>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Portal de Questionários</title><style>
 :root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#12233d;background:#eef3fb}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#102b57,#196ba7);color:white;padding:24px max(22px,calc((100vw - 1020px)/2));display:flex;align-items:center;justify-content:space-between;gap:10px}header h1{font-size:23px;margin:0}header small{opacity:.8}main{max-width:1030px;margin:30px auto;padding:0 17px}.card{background:white;border-radius:18px;padding:25px;box-shadow:0 9px 26px #15365b12;margin-bottom:18px}h2{font-size:21px;margin:0 0 19px}h3{margin:0 0 14px;font-size:17px}label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px;color:#456079}input,select{width:100%;padding:12px 13px;border:1px solid #cbd8e7;border-radius:9px;background:#fff;font:inherit}input[type=file]{padding:9px}button{padding:12px 16px;border:0;border-radius:10px;background:#1467af;color:white;font:inherit;font-weight:700;cursor:pointer}button:hover{filter:brightness(.96)}button:disabled{opacity:.65;cursor:wait}button.is-loading{display:inline-flex;align-items:center;justify-content:center;gap:9px;pointer-events:none}.btn-spinner{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;flex:none;animation:btn-spin .7s linear infinite}@keyframes btn-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.btn-spinner{animation-duration:1.7s}}.secondary{background:#e5eff9;color:#164f80}.danger{background:#bd4050}.muted{color:#62758b;font-size:14px}.hidden{display:none!important}.narrow{max-width:430px;margin:65px auto}.stack{display:grid;gap:13px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}.between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.pill{border-radius:20px;padding:6px 12px;background:#e6f2fe;color:#15578b;font-size:12px;font-weight:bold}.quizcard{border:1px solid #d7e3f0;border-radius:12px;padding:16px;margin:12px 0}.quizcard strong{display:block;margin-bottom:8px}.option{display:flex;align-items:flex-start;gap:12px;border:1px solid #dae3ed;border-radius:9px;padding:12px;margin:9px 0;cursor:pointer}.option input{width:auto;margin-top:4px;accent-color:#1467af}.hint{background:#fff8e1;padding:12px;border-left:4px solid #e0ae35;border-radius:7px;white-space:pre-line;margin-top:10px}.stat{background:#f0f6fd;padding:18px;border-radius:12px;flex:1;min-width:130px}.stat b{display:block;font-size:25px;color:#11558c}.stats{display:flex;flex-wrap:wrap;gap:11px;margin:15px 0}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:10px;border-bottom:1px solid #e5edf5}th{color:#526d88}.scroll{overflow:auto}#toast{position:fixed;bottom:23px;right:20px;background:#163352;color:#fff;padding:15px 20px;border-radius:12px;box-shadow:0 8px 35px #0003;max-width:400px;z-index:5}.warn{color:#9f5723;font-size:13px}@media(max-width:700px){.cols{grid-template-columns:1fr}header{padding:18px}header h1{font-size:18px}.card{padding:18px}}
 
 /* Navegação por cartões: uma questão visível de cada vez. */
@@ -13,6 +13,74 @@
 .quiz-progressbar{height:7px;border-radius:20px;background:#e4edf7;overflow:hidden;margin:15px 0}
 .quiz-progressbar>div{height:100%;background:#1467af;transition:width .2s}
 @media(max-width:480px){.quiz-navigation button{min-width:0;flex:1}.quiz-counter{order:-1;width:100%}}
+
+/* Aprimoramentos responsivos: preserva o comportamento e o backend existentes. */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{min-width:0;overflow-x:hidden}
+header>div,main,section,.card,.quizcard,.option,.between>div{min-width:0}
+h1,h2,h3,p,.quizcard strong,.option span,.feedback,.hint,td,th{overflow-wrap:anywhere}
+button,input,select{font-size:16px}
+button{min-height:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #57a3ee;outline-offset:3px}
+.option{min-height:54px;align-items:center;line-height:1.5;touch-action:manipulation}
+.option input{width:20px;height:20px;min-width:20px;flex:0 0 auto;margin:0}
+.option span{min-width:0;flex:1}
+input,select{max-width:100%;min-height:46px}
+#who{font-size:13px;overflow-wrap:anywhere;text-align:right;max-width:45%}
+#quizTitulo{margin-bottom:9px;line-height:1.3}
+#questoes{min-width:0}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scroll table{min-width:680px}
+#detalhesResultado .quizcard{max-width:100%}
+#toast{max-width:min(400px,calc(100vw - 24px));overflow-wrap:anywhere}
+@media(max-width:700px){
+ header{padding:15px 16px;align-items:flex-start;gap:10px}
+ header h1{font-size:19px;line-height:1.2}
+ header small{font-size:11px;display:block;margin-top:4px}
+ main{margin:16px auto;padding:0 12px}
+ .card{padding:18px 16px;margin-bottom:14px;border-radius:14px}
+ .narrow{margin:24px auto;max-width:100%}
+ h2{font-size:20px;margin-bottom:12px}
+ h3{font-size:17px}
+ .cols{grid-template-columns:minmax(0,1fr);gap:0}
+ .between{gap:10px}
+ .between>h2{margin:0;flex:1 1 200px}
+ .between>button{flex:0 0 auto}
+ #quizArea>.card{padding:16px 13px}
+ #quizArea>.card>.between{align-items:flex-start}
+ #quizArea>.card>.between>div{width:100%;flex:1 1 100%}
+ #quizArea>.card>.between>.danger{margin-left:auto;font-size:13px;padding:9px 12px;min-height:42px}
+ .quizcard.single-question{margin:15px 0 12px;padding:16px 13px;min-height:0}
+ .quizcard.single-question strong{font-size:17px;line-height:1.5;margin-bottom:15px}
+ .quizcard.single-question .option{padding:13px 12px;margin:10px 0;border-radius:12px}
+ .feedback,.hint{padding:13px;font-size:14px;line-height:1.6}
+ .confirm-line{align-items:stretch;flex-direction:column;gap:9px}
+ .confirm-line button{width:100%}
+ .quiz-navigation{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:12px}
+ .quiz-navigation .quiz-counter{grid-column:1/-1;grid-row:1;order:0;width:100%;text-align:center}
+ .quiz-navigation button{width:100%;min-width:0;grid-row:2;padding:12px 9px}
+ .quiz-navigation #btnAnterior{grid-column:1}
+ .quiz-navigation #btnProxima{grid-column:2}
+ #quizArea>.card>p:last-child button{width:100%;margin-top:3px}
+ #alunoArea>.card button[onclick^="comecar"],#fimArea button[onclick^="voltarAluno"],#importForm button[type="submit"],#alunoForm button[type="submit"]{width:100%}
+ .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .stat{padding:14px;min-width:0}
+ .stat b{font-size:23px}
+ #profQuizzes .quizcard{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+ #profQuizzes .quizcard strong{flex:1 1 100%;overflow-wrap:anywhere}
+ #profQuizzes .quizcard button{margin-left:auto!important}
+ #detalhesResultado button{max-width:100%}
+ #toast{bottom:calc(12px + env(safe-area-inset-bottom));left:12px;right:12px;width:auto;padding:12px 15px;font-size:14px}
+}
+@media(max-width:380px){
+ header h1{font-size:17px}
+ #who{font-size:12px;max-width:43%}
+ main{padding:0 9px}
+ .card{padding:15px 12px}
+ .quizcard.single-question{padding:13px 10px}
+ .stat{padding:11px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style></head><body><header><div><h1>📘 Portal de Questionários</h1><small>Aprendizagem e avaliação interativa</small></div><div id="who"></div></header><main>
 <section id="loginArea" class="card narrow"><h2>Acessar o sistema</h2><form id="loginForm"><label>Usuário</label><input id="login" autocomplete="username" required><label>Senha</label><input id="senha" type="password" autocomplete="current-password" required><p><button type="submit" id="loginBtn" style="width:100%">Entrar</button></p></form><p class="muted">Contas dos alunos são criadas pelo professor.</p></section>
 <section id="profArea" class="hidden"><div class="between"><h2>Painel do professor</h2><button class="secondary" onclick="logout(this)">Sair</button></div><div class="cols"><div class="card"><h3>📤 Importar questionário Gemini</h3><form id="importForm"><label>Matéria</label><input id="materia" placeholder="Ex.: Matemática" required><label>Nome do conteúdo</label><input id="conteudo" placeholder="Ex.: Equações do 1º grau" required><label>Arquivo JSON</label><input id="arquivo" type="file" accept=".json,application/json" required><p class="muted">Aceita questões com alternativas, resposta correta, dica e explicação da resposta.</p><button type="submit">Importar para o Google Drive</button></form></div><div class="card"><h3>👤 Cadastrar aluno</h3><form id="alunoForm"><label>Nome</label><input id="alunoNome" required><label>Login</label><input id="alunoLogin" required><label>Senha inicial (mínimo 8 caracteres)</label><input id="alunoSenha" type="password" minlength="8" required><p><button type="submit">Criar conta</button></p></form></div></div><div class="card"><div class="between"><h3>📚 Questionários cadastrados</h3><button class="secondary" onclick="atualizarProfessor(this)">Atualizar</button></div><div id="profQuizzes" class="stack muted">Carregando...</div></div><div class="card"><h3>📊 Resultados dos alunos</h3><div id="resultados" class="scroll"></div><div id="detalhesResultado" class="hidden" aria-live="polite"></div></div></section>
