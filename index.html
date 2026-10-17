@@ -79,10 +79,10 @@ $('profQuizzes').addEventListener('click',e=>{
  const id=btn.dataset.excluirQuiz;
  const item=btn.closest('.quizcard');
  const nome=item?.querySelector('strong')?.textContent||'este questionário';
- if(!confirm('Excluir "'+nome+'" da lista de questionários?\n\nOs alunos não terão mais acesso a ele. Os resultados já finalizados serão preservados.'))return;
+ if(!confirm('Excluir "'+nome+'" da lista de questionários?\n\nTentativas não finalizadas serão canceladas. Resultados de avaliações concluídas serão preservados.'))return;
  acaoBotao(btn,'Excluindo...',async()=>{
-   await api('excluirQuiz',token,id);
-   notice('Questionário excluído da lista.');
+   const r=await api('excluirQuiz',token,id);
+   notice('Questionário excluído. '+(r.tentativasCanceladas? r.tentativasCanceladas+' tentativa(s) pendente(s) cancelada(s).':'Nenhuma tentativa pendente.'));
    await carregarProfessor();
  });
 });
