@@ -211,7 +211,7 @@ $('vinculos').addEventListener('click',async e=>{
   await carregarProfessor();
  });
 });
-async function carregarResponsavel(){const r=await api('listarResultados',token);const el=$('resultadosResponsavel');$('nomeAlunoVinculado').textContent=r.length?'Resultados de '+r[0].aluno:'Resultados do aluno vinculado';const total=r.length,acertos=r.reduce((n,x)=>n+x.acertos,0),erros=r.reduce((n,x)=>n+x.erros,0),brancos=r.reduce((n,x)=>n+x.naoRespondidas,0);$('resumoResponsavel').innerHTML=[['Testes',total],['Acertos',acertos],['Erros',erros],['Em branco',brancos]].map(([a,b])=>'<div class="stat">'+a+'<b>'+b+'</b></div>').join('');el.innerHTML=r.length?'<table><thead><tr><th>Matéria / conteúdo</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Em branco</th><th>Revisão</th></tr></thead><tbody>'+r.map(x=>'<tr><td>'+esc(x.materia)+' / '+esc(x.conteudo)+'</td><td>'+x.respondidas+'/'+x.total+'</td><td>'+x.acertos+'</td><td>'+x.erros+'</td><td>'+x.naoRespondidas+'</td><td><button class="secondary" data-detalhar="'+esc(x.tentativaId)+'">Ver detalhes</button></td></tr>').join('')+'</tbody></table>':'Ainda não há avaliações finalizadas para este aluno.';$('detalhesResponsavel').classList.add('hidden')}
+async function carregarResponsavel(){const r=await api('listarResultados',token);const el=$('resultadosResponsavel');$('nomeAlunoVinculado').textContent=r.length?'Resultados de '+r[0].aluno:'Resultados do aluno vinculado';const total=r.length,acertos=r.reduce((n,x)=>n+x.acertos,0),erros=r.reduce((n,x)=>n+x.erros,0),brancos=r.reduce((n,x)=>n+x.naoRespondidas,0);$('resumoResponsavel').innerHTML=[['Testes',total],['Acertos',acertos],['Erros',erros],['Em branco',brancos]].map(([a,b])=>'<div class="stat">'+a+'<b>'+b+'</b></div>').join('');el.innerHTML=r.length?'<table><thead><tr><th>Matéria / conteúdo</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Em branco</th><th>Tempo (min)</th><th>Revisão</th></tr></thead><tbody>'+r.map(x=>'<tr><td>'+esc(x.materia)+' / '+esc(x.conteudo)+'</td><td>'+x.respondidas+'/'+x.total+'</td><td>'+x.acertos+'</td><td>'+x.erros+'</td><td>'+x.naoRespondidas+'</td><td><button class="secondary" data-detalhar="'+esc(x.tentativaId)+'">Ver detalhes</button></td></tr>').join('')+'</tbody></table>':'Ainda não há avaliações finalizadas para este aluno.';$('detalhesResponsavel').classList.add('hidden')}
 $('importForm').onsubmit=e=>{e.preventDefault();acaoBotao(e.submitter,'Importando...',async()=>{const file=$('arquivo').files[0];if(!file)throw Error('Selecione um arquivo JSON.');const txt=await file.text();const result=await api('importarQuiz',token,$('materia').value,$('conteudo').value,txt);notice('Importado: '+result.total+' questões em '+result.conteudo);$('importForm').reset();await carregarProfessor()})};
 async function carregarCotaEmail(){
  const label=$('cotaEmailTexto'),detalhe=$('cotaEmailDetalhe');
@@ -223,7 +223,7 @@ async function carregarCotaEmail(){
  }catch(e){label.textContent='Não foi possível consultar a cota: '+e.message;label.style.color='#a74722';}
 }
 function atualizarCotaEmail(btn){return acaoBotao(btn,'Consultando...',carregarCotaEmail)}
-async function carregarProfessor(){await carregarCotaEmail();await carregarVinculos();$('detalhesResultado').classList.add('hidden');const [q,r]=await Promise.all([api('listarQuizzes',token),api('listarResultados',token)]);$('profQuizzes').innerHTML=q.length?q.map(x=>'<div class="quizcard"><strong>'+esc(x.materia)+' — '+esc(x.conteudo)+'</strong>'+x.total+' questões <button type="button" class="danger" style="margin-left:12px" data-excluir-quiz="'+esc(x.id)+'" aria-label="Excluir questionário '+esc(x.conteudo)+'">Excluir</button></div>').join(''):'Nenhum questionário importado.';$('resultados').innerHTML=r.length?'<table><thead><tr><th>Aluno</th><th>Matéria / Conteúdo</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Saídas da aba</th><th>Revisão</th></tr></thead><tbody>'+r.map(x=>'<tr><td>'+esc(x.aluno)+'</td><td>'+esc(x.materia)+' / '+esc(x.conteudo)+'</td><td>'+x.respondidas+'/'+x.total+'</td><td>'+x.acertos+'</td><td>'+x.erros+'</td><td>'+x.saidasDeAba+'</td><td><button type="button" class="secondary" data-detalhar="'+esc(x.tentativaId)+'">Ver detalhes</button></td></tr>').join('')+'</tbody></table>':'Nenhum resultado finalizado.'}
+async function carregarProfessor(){await Promise.all([carregarCotaEmail(),carregarVinculos()]);$('detalhesResultado').classList.add('hidden');const [q,r]=await Promise.all([api('listarQuizzes',token),api('listarResultados',token)]);$('profQuizzes').innerHTML=q.length?q.map(x=>'<div class="quizcard"><strong>'+esc(x.materia)+' — '+esc(x.conteudo)+'</strong>'+x.total+' questões <button type="button" class="danger" style="margin-left:12px" data-excluir-quiz="'+esc(x.id)+'" aria-label="Excluir questionário '+esc(x.conteudo)+'">Excluir</button></div>').join(''):'Nenhum questionário importado.';$('resultados').innerHTML=r.length?'<table><thead><tr><th>Aluno</th><th>Matéria / Conteúdo</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Saídas da aba</th><th>Início</th><th>Término</th><th>Tempo (min)</th><th>Revisão</th></tr></thead><tbody>'+r.map(x=>'<tr><td>'+esc(x.aluno)+'</td><td>'+esc(x.materia)+' / '+esc(x.conteudo)+'</td><td>'+x.respondidas+'/'+x.total+'</td><td>'+x.acertos+'</td><td>'+x.erros+'</td><td>'+x.saidasDeAba+'</td><td><button type="button" class="secondary" data-detalhar="'+esc(x.tentativaId)+'">Ver detalhes</button></td></tr>').join('')+'</tbody></table>':'Nenhum resultado finalizado.'}
 // Guarda somente o relatório solicitado; não expõe os dados de outros alunos.
 let relatorioDetalhadoAtual=null;
 function exportarRelatorioPDF(btn){
@@ -289,9 +289,10 @@ $('profQuizzes').addEventListener('click',e=>{
  });
 });
 function atualizarProfessor(btn){return acaoBotao(btn,'Carregando...',()=>carregarProfessor())}
+function formatarDataHoraQuiz(v){return v?new Date(v).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}):'—';}
 async function carregarQuizzes(){quizzes=await api('listarQuizzes',token);let materias=[...new Set(quizzes.map(q=>q.materia))].sort((a,b)=>a.localeCompare(b,'pt-BR'));$('filtroMateria').innerHTML=materias.map(m=>'<option value="'+esc(m)+'">'+esc(m)+'</option>').join('');renderConteudos()}
 function renderConteudos(){const m=$('filtroMateria').value;$('filtroConteudo').innerHTML=quizzes.filter(q=>q.materia===m).map(q=>'<option value="'+esc(q.id)+'">'+esc(q.conteudo)+' ('+q.total+' questões)</option>').join('')}
-function comecar(btn){acaoBotao(btn,'Carregando...',async()=>{pendingAnswers=Promise.resolve();const id=$('filtroConteudo').value;if(!id)throw Error('Nenhum conteúdo disponível.');const r=await api('iniciarQuiz',token,id);tentativa=r.tentativaId;questoes=r.questoes;escolhas={};confirmacoes={};confirmando.clear();explicacoesVisiveis.clear();indiceQuestao=0;dicasAbertas.clear();$('quizTitulo').textContent=r.materia+' — '+r.conteudo;show('quizArea');renderQuestoes()})}
+function comecar(btn){acaoBotao(btn,'Carregando...',async()=>{pendingAnswers=Promise.resolve();falhaSalvamento=false;const id=$('filtroConteudo').value;if(!id)throw Error('Nenhum conteúdo disponível.');const r=await api('iniciarQuiz',token,id);tentativa=r.tentativaId;questoes=r.questoes;escolhas={};confirmacoes={};confirmando.clear();explicacoesVisiveis.clear();indiceQuestao=0;dicasAbertas.clear();$('quizTitulo').textContent=r.materia+' — '+r.conteudo;show('quizArea');renderQuestoes()})}
 function atualizarProgresso(){
  const feitas=questoes.filter(q=>Object.prototype.hasOwnProperty.call(confirmacoes,q.id)).length;
  $('progresso').textContent=feitas+' de '+questoes.length+' respondidas';
@@ -324,7 +325,7 @@ function navegarQuestao(direcao,btn){
 async function alternarDica(i,btn){await acaoBotao(btn,'Carregando...',async()=>{
  if(dicasAbertas.has(i))dicasAbertas.delete(i);else dicasAbertas.add(i);
  $('dica'+i).classList.toggle('hidden',!dicasAbertas.has(i));
- await new Promise(resolve=>setTimeout(resolve,160));
+
  // Atualiza o texto do botão, preservando o controle de carregamento.
  });if(btn && btn.isConnected)btn.textContent='💡 '+(dicasAbertas.has(i)?'Ocultar dica':'Exibir dica');
 }
@@ -352,21 +353,20 @@ function confirmarResposta(i,btn){
      card.querySelectorAll('input[type="radio"]').forEach(el=>el.disabled=true);
    }
  }
- const requisicao=api('responder',token,tentativa,q.id,indice).then(r=>{
-   confirmacoes[q.id]=r;atualizarProgresso();
+ const requisicao=pendingAnswers.catch(()=>{}).then(()=>api('responder',token,tentativa,q.id,indice)).then(r=>{
+   confirmacoes[q.id]=r;falhaSalvamento=false;atualizarProgresso();
    if(indiceQuestao===i)renderQuestoes();
    return r;
- }).catch(e=>{explicacoesVisiveis.delete(q.id);notice('⚠️ Não foi possível confirmar a resposta: '+e.message);throw e;}).finally(()=>{
+ }).catch(e=>{explicacoesVisiveis.delete(q.id);falhaSalvamento=true;notice('⚠️ Não foi possível confirmar a resposta: '+e.message);throw e;}).finally(()=>{
    confirmando.delete(q.id);if(indiceQuestao===i&&!confirmacoes[q.id])renderQuestoes();
  });
  // Mantém todas as confirmações pendentes antes da finalização.
- pendingAnswers=Promise.allSettled([pendingAnswers.catch(()=>{}),requisicao]).then(resultados=>{
-   const erro=resultados.find(r=>r.status==='rejected');if(erro)throw erro.reason;
- });
+ pendingAnswers=requisicao;
  return acaoBotao(btn,'Salvando...',()=>requisicao);
 }
+let falhaSalvamento=false;
 let finalizando=false;
-function finalizar(btn){if(!tentativa||finalizando)return;if(!confirm('Finalizar agora? Questões em branco serão contabilizadas como não respondidas.'))return;finalizando=true;const botoesFinalizar=[...$('quizArea').querySelectorAll('button')].filter(b=>b!==btn&&/^(Finalizar tentativa|Encerrar e ver resultado)$/.test(b.textContent.trim()));botoesFinalizar.forEach(b=>b.disabled=true);return acaoBotao(btn,'Finalizando...',async()=>{await pendingAnswers;const r=await api('finalizarQuiz',token,tentativa);tentativa=null;show('fimArea');$('fimDescricao').textContent=r.materia+' — '+r.conteudo;$('fimStats').innerHTML=[['Total',r.total],['Respondidas',r.respondidas],['Acertos',r.acertos],['Erros',r.erros],['Em branco',r.naoRespondidas],['Saídas da aba',r.saidasDeAba]].map(x=>'<div class="stat"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}).finally(()=>{finalizando=false;botoesFinalizar.forEach(b=>b.disabled=false)})}
+function finalizar(btn){if(!tentativa||finalizando)return;if(!confirm('Finalizar agora? Questões em branco serão contabilizadas como não respondidas.'))return;finalizando=true;const botoesFinalizar=[...$('quizArea').querySelectorAll('button')].filter(b=>b!==btn&&/^(Finalizar tentativa|Encerrar e ver resultado)$/.test(b.textContent.trim()));botoesFinalizar.forEach(b=>b.disabled=true);return acaoBotao(btn,'Finalizando...',async()=>{await pendingAnswers;if(falhaSalvamento)throw Error('Há respostas que não foram salvas. Confirme novamente as questões com falha antes de finalizar.');const r=await api('finalizarQuiz',token,tentativa);tentativa=null;show('fimArea');$('fimDescricao').textContent=r.materia+' — '+r.conteudo;$('fimStats').innerHTML=[['Total',r.total],['Respondidas',r.respondidas],['Acertos',r.acertos],['Erros',r.erros],['Em branco',r.naoRespondidas],['Saídas da aba',r.saidasDeAba],['Tempo (min)',r.duracaoMinutos??'—'],['Início',formatarDataHoraQuiz(r.inicio)],['Término',formatarDataHoraQuiz(r.fim)]].map(x=>'<div class="stat"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('')}).finally(()=>{finalizando=false;botoesFinalizar.forEach(b=>b.disabled=false)})}
 async function voltarAluno(btn){await acaoBotao(btn,'Carregando...',async()=>{await carregarQuizzes();show('alunoArea')})}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&tentativa&&user?.perfil==='aluno'){api('registrarSaida',token,tentativa).catch(()=>{})}});
 window.addEventListener('beforeunload',e=>{if(tentativa){e.preventDefault();e.returnValue=''}});
