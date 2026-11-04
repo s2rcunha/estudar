@@ -130,14 +130,14 @@ input,select{max-width:100%;min-height:46px}
 <section class="card narrow hidden" id="senhaArea"><h2>🔐 Alterar senha</h2><p class="muted" id="senhaOrientacao">Para sua segurança, defina uma senha pessoal antes de acessar os questionários.</p><form id="senhaForm"><label for="senhaAtual">Senha atual ou provisória</label><input autocomplete="current-password" id="senhaAtual" required="" type="password"/><label for="senhaNova">Nova senha (8 a 128 caracteres)</label><input autocomplete="new-password" id="senhaNova" maxlength="128" minlength="8" required="" type="password"/><label for="senhaConfirmacao">Confirmar nova senha</label><input autocomplete="new-password" id="senhaConfirmacao" maxlength="128" minlength="8" required="" type="password"/><p><button style="width:100%" type="submit">Salvar nova senha</button></p></form><button class="secondary" onclick="logout(this)" type="button">Sair da conta</button></section>
 <section class="hidden" id="profArea"><div class="prof-shell" id="professorShell"><aside aria-label="Menu do professor" class="prof-sidebar" id="profSidebar"><div class="prof-sidebar-brand">📘 Administração</div><nav class="prof-nav"><button class="prof-nav-btn" data-prof-target="painel" type="button">Visão geral</button><button class="prof-nav-btn" data-prof-target="materias" type="button">Matérias e migração</button><button class="prof-nav-btn" data-prof-target="importar" type="button">Importar questionário</button><button class="prof-nav-btn" data-prof-target="alunos" type="button">Cadastrar aluno</button><button class="prof-nav-btn" data-prof-target="familias" type="button">Responsáveis e famílias</button><button class="prof-nav-btn" data-prof-target="conteudos" type="button">Gerenciar conteúdos</button><button class="prof-nav-btn" data-prof-target="resultados" type="button">Resultados e relatórios</button><button class="prof-nav-btn" data-prof-target="emails" type="button">Cota de e-mails</button></nav><button class="prof-sidebar-exit" onclick="logout(this)" type="button">Sair da conta</button></aside><div class="prof-main"><div class="prof-main-top"><button class="prof-menu-toggle" id="profMenuToggle" onclick="alternarMenuProfessor()" type="button">☰ Menu</button><h2>Painel do professor</h2></div><div class="card prof-welcome"><h3>Central de administração</h3><p class="muted">Escolha uma função no menu para abrir sua área de trabalho. Os formulários e relatórios ficam separados, sem ocupar toda a página.</p></div><div class="prof-shortcuts"><button class="prof-shortcut" data-prof-target="materias" type="button">Matérias e migração</button><button class="prof-shortcut" data-prof-target="importar" type="button">Importar questionário</button><button class="prof-shortcut" data-prof-target="alunos" type="button">Cadastrar aluno</button><button class="prof-shortcut" data-prof-target="familias" type="button">Responsáveis e famílias</button><button class="prof-shortcut" data-prof-target="conteudos" type="button">Gerenciar conteúdos</button><button class="prof-shortcut" data-prof-target="resultados" type="button">Resultados e relatórios</button><button class="prof-shortcut" data-prof-target="emails" type="button">Cota de e-mails</button></div></div></div><div class="prof-sidebar-backdrop hidden" id="profSidebarBackdrop" onclick="alternarMenuProfessor(false)"></div><div aria-labelledby="profModalTitulo" aria-modal="true" class="prof-modal-overlay hidden" id="profModal" role="dialog"><div class="prof-modal-window"><div class="prof-modal-header"><h2 id="profModalTitulo"></h2><button aria-label="Fechar janela" class="prof-modal-close" onclick="fecharFuncaoProfessor()" type="button">✕</button></div><div class="prof-modal-body" id="profModalBody"><div class="prof-panel hidden" id="profPanel_painel"><div class="card prof-modal-card"><h3>Bem-vindo ao painel</h3><p class="muted">Use o menu para abrir as funções. Cada área possui uma janela própria.</p></div></div><div class="prof-panel hidden" id="profPanel_materias"><div class="card prof-modal-card"><h3>📁 Gerenciar matérias e arquivos</h3><p class="muted">Crie a matéria antes de importar. Cada conteúdo ficará em um arquivo JSON separado na pasta da matéria no Google Drive.</p><form class="between" id="materiaForm"><input id="novaMateria" maxlength="100" placeholder="Ex.: Matemática" required="" style="flex:1;min-width:180px"/><button type="submit">Criar matéria</button></form><p class="muted" id="materiasResumo">Carregando matérias...</p><p><button class="secondary" onclick="executarMigracao(this)" type="button">Migrar questionários antigos</button></p><p class="warn">Execute a migração uma vez após atualizar o backend. Ela cria backups e preserva os IDs das avaliações.</p></div></div><div class="prof-panel hidden" id="profPanel_importar"><div class="card prof-modal-card"><h3>📤 Importar questionário Gemini</h3><form id="importForm"><label>Matéria cadastrada</label><select id="materia" required=""><option value="">Selecione uma matéria</option></select><label>Nome do conteúdo</label><input id="conteudo" placeholder="Ex.: Equações do 1º grau" required=""/><label>Arquivo JSON</label><input accept=".json,application/json" id="arquivo" required="" type="file"/><p class="muted">Aceita questões com alternativas, resposta correta, dica e explicação da resposta.</p><p><button class="secondary" onclick="baixarModeloQuiz(this)" type="button">⬇ Baixar modelo JSON para IA</button></p><button type="submit">Importar para o Google Drive</button></form></div></div><div class="prof-panel hidden" id="profPanel_alunos"><div class="card prof-modal-card"><h3>👤 Cadastrar aluno</h3><form id="alunoForm"><label>Nome</label><input id="alunoNome" required=""/><label>Login</label><input id="alunoLogin" required=""/><label>Senha inicial (mínimo 8 caracteres)</label><input id="alunoSenha" minlength="8" required="" type="password"/><p><button type="submit">Criar conta</button></p></form></div></div><div class="prof-panel hidden" id="profPanel_familias"><div class="card prof-modal-card"><h3>👨‍👩‍👧 Cadastrar responsável</h3><p class="muted">Vincule cada conta de responsável a um aluno. O responsável verá somente os resultados desse aluno.</p><form id="responsavelForm"><label for="responsavelNome">Nome do responsável</label><input id="responsavelNome" required=""/><label for="responsavelLogin">Login</label><input id="responsavelLogin" required=""/><label for="responsavelSenha">Senha provisória (mínimo 8 caracteres)</label><input id="responsavelSenha" maxlength="128" minlength="8" required="" type="password"/><label for="responsavelAluno">Aluno vinculado</label><select id="responsavelAluno" required=""></select><p><button type="submit">Criar responsável</button></p></form><h3 style="margin-top:22px">Responsáveis cadastrados</h3><div class="stack muted" id="vinculos">Carregando...</div></div></div><div class="prof-panel hidden" id="profPanel_conteudos"><div class="card prof-modal-card"><div class="between"><h3>📚 Questionários cadastrados</h3><button class="secondary" onclick="atualizarProfessor(this)">Atualizar</button></div><label for="filtroMateriaProfessor">Selecione a matéria</label><select id="filtroMateriaProfessor" onchange="renderQuizzesProfessor()"><option value="">Selecione uma matéria</option></select><p class="muted" id="contagemQuizzesProfessor"></p><div class="stack muted" id="profQuizzes">Selecione uma matéria.</div></div><div class="card prof-modal-card hidden" id="editorQuizCard"><div class="between"><h3 id="editorQuizTitulo">✏️ Editar questões</h3><button class="secondary" onclick="fecharEditorQuiz()" type="button">Fechar</button></div><p class="muted">As alterações valem para novas avaliações. Resultados e gabaritos de tentativas anteriores são preservados.</p><div id="editorQuestoesLista"></div><h3 id="editorQuestaoTitulo">Adicionar questão</h3><form id="editorQuestaoForm"><label>Enunciado</label><textarea id="editorEnunciado" required="" rows="3"></textarea><div id="editorAlternativas"></div><button class="secondary" onclick="adicionarAlternativaEditor()" type="button">+ Alternativa</button><label>Alternativa correta</label><select id="editorCorreta" required=""></select><label>Dica (opcional)</label><textarea id="editorDica" rows="2"></textarea><label>Explicação da resposta</label><textarea id="editorExplicacao" rows="3"></textarea><p class="between"><button type="submit">Salvar questão</button><button class="secondary" onclick="limparEditorQuestao()" type="button">Cancelar edição / Nova questão</button></p></form></div></div><div class="prof-panel hidden" id="profPanel_resultados"><div class="card prof-modal-card"><h3>📊 Resultados dos alunos</h3><label for="pesquisaAlunoProfessor">Pesquisar aluno</label><input autocomplete="off" id="pesquisaAlunoProfessor" oninput="renderAlunosProfessor()" placeholder="Digite o nome do aluno"/><label for="filtroAlunoProfessor">Aluno</label><select id="filtroAlunoProfessor" onchange="atualizarMateriasResultadoProfessor()"><option value="">Selecione um aluno</option></select><label for="filtroMateriaResultadoProfessor">Matéria respondida</label><select disabled="" id="filtroMateriaResultadoProfessor" onchange="renderResultadosProfessor()"><option value="">Selecione primeiro um aluno</option></select><p class="muted" id="contagemResultadosProfessor"></p><div class="scroll" id="resultados"></div><div aria-live="polite" class="hidden" id="detalhesResultado"></div></div></div><div class="prof-panel hidden" id="profPanel_emails"><div aria-live="polite" class="card prof-modal-card" id="cotaEmailCard"><div class="between"><div><h3>✉️ Cota de e-mails do Google</h3><p class="muted" id="cotaEmailTexto">Consultando disponibilidade...</p><p class="muted" id="cotaEmailDetalhe">A cota é informada pelo próprio Apps Script e considera destinatários, não apenas mensagens.</p></div><button class="secondary" onclick="atualizarCotaEmail(this)" type="button">↻ Atualizar cota</button></div></div></div></div></div></div></section>
 <section class="hidden" id="responsavelArea"><div class="between"><h2>👨‍👩‍👧 Acompanhamento do aluno</h2><div class="between"><button class="secondary" onclick="abrirTrocaSenha()">Alterar senha</button><button class="secondary" onclick="logout(this)">Sair</button></div></div><div class="card"><h3 id="nomeAlunoVinculado">Resultados do aluno</h3><p class="muted">Avaliações finalizadas e revisões individuais. Apenas resultados do aluno vinculado são disponibilizados.</p><div class="stats" id="resumoResponsavel"></div><div class="scroll" id="resultadosResponsavel"></div><div aria-live="polite" class="hidden" id="detalhesResponsavel"></div></div></section>
-<section class="hidden" id="alunoArea"><div class="between"><h2>Escolha seu questionário</h2><div class="between"><button class="secondary" onclick="abrirTrocaSenha()">Alterar senha</button><button class="secondary" onclick="logout(this)">Sair</button></div></div><div class="card"><label>Matéria</label><select id="filtroMateria" onchange="renderConteudos()"></select><label>Conteúdo</label><select id="filtroConteudo"></select><p><button onclick="comecar(this)">Iniciar questões</button></p></div><div class="card"><h3>Orientações</h3><p class="muted">Selecione uma alternativa e clique em “Confirmar resposta” para salvá-la e visualizar a explicação. Você pode avançar ou voltar sem responder; após confirmar, não será possível alterar a resposta. Ao finalizar, verá o resultado.</p><p class="warn">Durante a avaliação, o sistema registra quando esta página fica oculta. Ele não identifica outros sites ou aplicativos.</p></div></section>
-<section class="hidden" id="quizArea"><div class="card"><div class="between"><div><h2 id="quizTitulo"></h2><span class="pill" id="progresso"></span></div><button class="danger" onclick="finalizar(this)">Finalizar tentativa</button></div><div aria-hidden="true" class="quiz-progressbar"><div id="barraProgresso" style="width:0%"></div></div><div aria-live="polite" class="muted" id="estadoSync" role="status" style="margin:12px 0">✓ Pronto para responder</div><div id="questoes"></div><div class="quiz-navigation"><button class="secondary" id="btnAnterior" onclick="navegarQuestao(-1,this)" type="button">← Anterior</button><span class="quiz-counter" id="contadorQuestao"></span><button id="btnProxima" onclick="navegarQuestao(1,this)" type="button">Próxima →</button></div><p><button class="secondary" onclick="finalizar(this)">Encerrar e ver resultado</button></p></div></section>
+<section class="hidden" id="alunoArea"><div class="between"><h2>Escolha seu questionário</h2><div class="between"><button class="secondary" onclick="abrirTrocaSenha()">Alterar senha</button><button class="secondary" onclick="logout(this)">Sair</button></div></div><div class="card"><label>Matéria</label><select id="filtroMateria" onchange="renderConteudos()"></select><label>Conteúdo</label><select id="filtroConteudo"></select><p><button onclick="comecar(this)">Iniciar questões</button></p></div><div class="card"><h3>Orientações</h3><p class="muted">Selecione uma alternativa e clique em “Confirmar resposta” para salvá-la no aparelho e visualizar imediatamente se acertou, o gabarito e a explicação. Você pode avançar ou voltar sem responder; após confirmar, não será possível alterar a resposta. Somente ao finalizar as respostas serão enviadas ao servidor e você verá o resultado oficial.</p><p class="warn">Durante a avaliação, o sistema registra quando esta página fica oculta. Ele não identifica outros sites ou aplicativos.</p></div></section>
+<section class="hidden" id="quizArea"><div class="card"><div class="between"><div><h2 id="quizTitulo"></h2><span class="pill" id="progresso"></span></div><button class="danger" onclick="finalizar(this)">Finalizar tentativa</button></div><div aria-hidden="true" class="quiz-progressbar"><div id="barraProgresso" style="width:0%"></div></div><div aria-live="polite" class="muted" id="estadoSync" role="status" style="margin:12px 0">📱 Respostas guardadas localmente até finalizar</div><div id="questoes"></div><div class="quiz-navigation"><button class="secondary" id="btnAnterior" onclick="navegarQuestao(-1,this)" type="button">← Anterior</button><span class="quiz-counter" id="contadorQuestao"></span><button id="btnProxima" onclick="navegarQuestao(1,this)" type="button">Próxima →</button></div><p><button class="secondary" onclick="finalizar(this)">Encerrar e ver resultado</button></p></div></section>
 <section class="hidden" id="fimArea"><div class="card"><h2>🏆 Resultado do questionário</h2><p id="fimDescricao"></p><div class="stats" id="fimStats"></div><p><button onclick="voltarAluno(this)">Responder outro conteúdo</button></p></div></section>
 </main><div class="hidden" id="toast"></div><script>
 // Cole abaixo a URL da implantação WEB APP (/exec) do Google Apps Script.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw67hvHD24pWiGAcF4OiSDQoJUMxXvITuBI3WfzGecufjT8TUmyoGw_-iuMxol0hImm/exec';
 let token=sessionStorage.getItem('quizToken')||'',user=null,quizzes=[],tentativa=null,questoes=[],escolhas={};
-let syncTimer=null,syncBusy=false,syncPromise=null,syncUltimaFalha=0,localDB=null,localReady=false,indiceQuestao=0,dicasAbertas=new Set(),confirmacoes={},confirmando=new Set(),explicacoesVisiveis=new Set();
+let localDB=null,indiceQuestao=0,dicasAbertas=new Set(),confirmacoes={},confirmando=new Set(),explicacoesVisiveis=new Set();
 const $=x=>document.getElementById(x);const show=id=>['loginArea','cadastroFamiliaArea','recuperarArea','senhaArea','profArea','responsavelArea','alunoArea','quizArea','fimArea'].forEach(x=>$(x).classList.toggle('hidden',x!==id));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function notice(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(notice.timer);notice.timer=setTimeout(()=>$('toast').classList.add('hidden'),4800)}
@@ -394,23 +394,10 @@ async function salvarLocal(){if(!tentativa)return;
 async function lerLocal(id){if(!localDB)localDB=await abrirDBLocal();return new Promise((resolve,reject)=>{const tx=localDB.transaction('tentativas','readonly'),q=tx.objectStore('tentativas').get(id);q.onsuccess=()=>resolve(q.result||null);q.onerror=()=>reject(q.error);});}
 async function limparLocal(id){if(!localDB)localDB=await abrirDBLocal();return new Promise((resolve,reject)=>{const tx=localDB.transaction('tentativas','readwrite');tx.objectStore('tentativas').delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}
 function atualizarSync(msg){const el=$('estadoSync');if(el)el.textContent=msg;}
-function agendarSync(imediato=false){clearTimeout(syncTimer);if(!tentativa)return;
- const pendentes=Object.values(confirmacoes).filter(r=>!r.salvo).length;
- atualizarSync(pendentes?'● '+pendentes+' resposta(s) aguardando sincronização':'✓ Todas as respostas sincronizadas');
- if((pendentes>=10||imediato)&&navigator.onLine)sincronizar();else if(pendentes&&navigator.onLine)syncTimer=setTimeout(()=>sincronizar(),12000);
-}
-async function sincronizar(){if(syncBusy)return syncPromise;if(!tentativa||!navigator.onLine)return;
- const id=tentativa,itens=Object.keys(confirmacoes).filter(k=>!confirmacoes[k].salvo).map(k=>({questaoId:k,indice:confirmacoes[k].indice}));
- if(!itens.length){atualizarSync('✓ Todas as respostas sincronizadas');return;}
- syncBusy=true;clearTimeout(syncTimer);atualizarSync('⟳ Sincronizando '+itens.length+' resposta(s)...');
- syncPromise=(async()=>{try{
-   const resp=await api('sincronizarRespostas',token,id,itens.slice(0,50));syncUltimaFalha=0;
-   for(const r of resp.resultados){const x=confirmacoes[r.questaoId];if(x&&x.indice===r.indice){Object.assign(x,r,{salvo:true});}}
-   await salvarLocal();if(tentativa===id)renderQuestoes();
-   if(!Object.values(confirmacoes).some(x=>!x.salvo))atualizarSync('✓ Todas as respostas sincronizadas');
- }catch(e){syncUltimaFalha=Date.now();atualizarSync('⚠️ Respostas guardadas neste dispositivo; envio pendente.');notice('⚠️ Sincronização pendente: '+e.message);}
- finally{syncBusy=false;syncPromise=null;if(tentativa===id&&Object.values(confirmacoes).some(x=>!x.salvo)){clearTimeout(syncTimer);syncTimer=setTimeout(()=>sincronizar(),syncUltimaFalha&&Date.now()-syncUltimaFalha<30000?30000:12000);}}
- })();return syncPromise;
+// Não envia respostas durante a prova. O único envio de respostas é ao finalizar.
+function atualizarEstadoLocal(){
+ const n=Object.keys(confirmacoes).length;
+ atualizarSync('📱 '+n+' resposta(s) guardada(s) neste dispositivo. Envio somente ao finalizar.');
 }
 async function recuperarEmAndamento(){
  const r=await api('retomarTentativa',token);if(!r)return false;
@@ -418,18 +405,19 @@ async function recuperarEmAndamento(){
  tentativa=r.tentativaId;questoes=r.questoes;escolhas=dados?.escolhas||{};confirmacoes=dados?.confirmacoes||{};
  for(const [id,indice] of Object.entries(r.respostas||{})){
   const q=questoes.find(x=>x.id===id);if(!q)continue;
-  const feedback=(r.feedback||[]).find(x=>x.questaoId===id);confirmacoes[id]={...(confirmacoes[id]||{}),...(feedback||{}),indice:Number(indice),salvo:true};escolhas[id]=Number(indice);
+  const feedback=(r.feedback||[]).find(x=>x.questaoId===id);confirmacoes[id]={...(confirmacoes[id]||{}),...(feedback||{}),indice:Number(indice),salvo:true,acertou:Number(indice)===q.correta,indiceCorreto:q.correta};escolhas[id]=Number(indice);
  }
+ Object.entries(confirmacoes).forEach(([id,r])=>{const q=questoes.find(x=>x.id===id);if(q&&Number.isInteger(q.correta)){r.acertou=r.indice===q.correta;r.indiceCorreto=q.correta;}});
  indiceQuestao=Math.min(dados?.indiceQuestao||0,questoes.length-1);confirmando.clear();explicacoesVisiveis.clear();dicasAbertas.clear();
  $('quizTitulo').textContent=r.materia+' — '+r.conteudo;show('quizArea');renderQuestoes();
- await salvarLocal();agendarSync(true);notice('Avaliação em andamento recuperada.');return true;
+ await salvarLocal();atualizarEstadoLocal();notice('Avaliação em andamento recuperada.');return true;
 }
 
 function comecar(btn){return acaoBotao(btn,'Carregando...',async()=>{
  const id=$('filtroConteudo').value;if(!id)throw Error('Nenhum conteúdo disponível.');
  if(await recuperarEmAndamento())return;
  const r=await api('iniciarQuiz',token,id);tentativa=r.tentativaId;questoes=r.questoes;escolhas={};confirmacoes={};confirmando.clear();explicacoesVisiveis.clear();indiceQuestao=0;dicasAbertas.clear();
- $('quizTitulo').textContent=r.materia+' — '+r.conteudo;await salvarLocal();show('quizArea');renderQuestoes();agendarSync();
+ $('quizTitulo').textContent=r.materia+' — '+r.conteudo;await salvarLocal();show('quizArea');renderQuestoes();atualizarEstadoLocal();
 });}
 function atualizarProgresso(){
  const feitas=questoes.filter(q=>Object.prototype.hasOwnProperty.call(confirmacoes,q.id)).length;
@@ -443,12 +431,11 @@ function renderQuestoes(){
  const i=indiceQuestao,q=questoes[i],res=confirmacoes[q.id],bloqueada=!!res||confirmando.has(q.id);
  const explicacaoDisponivel=Object.prototype.hasOwnProperty.call(q,'explicacao');
  const explicacao=explicacaoDisponivel?q.explicacao:(res?.explicacao||'');
- const feedback=res?'<div class="feedback '+(res.salvo?(res.acertou?'ok':'no'):'')+'" role="status"><strong>'+(res.salvo?(res.acertou?'✅ Você acertou!':'❌ Resposta incorreta'):'✓ Resposta confirmada no dispositivo')+'</strong>'+(res.salvo?'<div><b>Resposta correta:</b> '+esc(String.fromCharCode(65+res.indiceCorreto)+') '+q.opcoes[res.indiceCorreto])+'</div>':'<div class="muted">A correção será exibida após sincronizar.</div>')+'<div style="margin-top:9px"><b>Explicação:</b> '+esc(explicacao||'Não há explicação cadastrada para esta questão.')+'</div></div>':
- (explicacoesVisiveis.has(q.id)?'<div class="feedback" role="status"><div><b>Explicação:</b> '+esc(explicacao||'Não há explicação cadastrada para esta questão.')+'</div><div class="muted" style="margin-top:9px">⏳ Salvando sua resposta e conferindo o resultado...</div></div>':'');
+ const feedback=res?'<div class="feedback '+(res.acertou?'ok':'no')+'" role="status"><strong>'+(res.acertou?'✅ Você acertou!':'❌ Resposta incorreta')+'</strong><div><b>Resposta correta:</b> '+esc(String.fromCharCode(65+res.indiceCorreto)+') '+q.opcoes[res.indiceCorreto])+'</div><div style="margin-top:9px"><b>Explicação:</b> '+esc(explicacao||'Não há explicação cadastrada para esta questão.')+'</div></div>':'';
  $('questoes').innerHTML='<div class="quizcard single-question"><strong>Questão '+(i+1)+' — '+esc(q.enunciado)+'</strong>'+
  q.opcoes.map((o,j)=>'<label class="option"><input type="radio" name="questaoAtual" value="'+j+'" '+(escolhas[q.id]===j?'checked':'')+' '+(bloqueada?'disabled':'')+' onchange="marcar('+i+','+j+')"><span>'+String.fromCharCode(65+j)+') '+esc(o)+'</span></label>').join('')+
  (q.dica?'<button type="button" class="secondary" onclick="alternarDica('+i+',this)">💡 '+(dicasAbertas.has(i)?'Ocultar dica':'Exibir dica')+'</button><div class="hint '+(dicasAbertas.has(i)?'':'hidden')+'" id="dica'+i+'">'+esc(q.dica)+'</div>':'')+
- '<div class="confirm-line">'+(res?'<span class="confirmed-label">'+(res.salvo?'✓ Resposta salva no servidor':'◷ Salva no dispositivo')+'</span>':'<button id="btnConfirmar" type="button" '+(escolhas[q.id]===undefined||bloqueada?'disabled':'')+' onclick="confirmarResposta('+i+',this)">Confirmar resposta</button><span class="muted">Você pode pular esta questão e responder depois.</span>')+'</div>'+feedback+'</div>';
+ '<div class="confirm-line">'+(res?'<span class="confirmed-label">'+'✓ Confirmada no dispositivo'+'</span>':'<button id="btnConfirmar" type="button" '+(escolhas[q.id]===undefined||bloqueada?'disabled':'')+' onclick="confirmarResposta('+i+',this)">Confirmar resposta</button><span class="muted">Você pode pular esta questão e responder depois.</span>')+'</div>'+feedback+'</div>';
  $('btnAnterior').disabled=i===0;
  $('btnProxima').disabled=i===questoes.length-1;
  atualizarProgresso();
@@ -458,6 +445,7 @@ function navegarQuestao(direcao,btn){
  if(proximo<0||proximo>=questoes.length)return;
  // A navegação é local e instantânea; salvar respostas continua em paralelo.
  indiceQuestao=proximo;renderQuestoes();
+ salvarLocal().catch(()=>{}); // guarda a posição para retomar no mesmo card
  $('quizTitulo').scrollIntoView({behavior:'smooth',block:'start'});
 }
 async function alternarDica(i,btn){await acaoBotao(btn,'Carregando...',async()=>{
@@ -477,31 +465,38 @@ async function confirmarResposta(i,btn){
  const indice=escolhas[q.id];if(!Number.isInteger(indice)){notice('Selecione uma alternativa.');return;}
  confirmando.add(q.id);
  try{
-  confirmacoes[q.id]={indice,salvo:false};
+  if(!Number.isInteger(q.correta)||q.correta<0||q.correta>=q.opcoes.length)throw Error('Gabarito não carregado. Reabra o teste.');
+  confirmacoes[q.id]={indice,salvo:false,acertou:indice===q.correta,indiceCorreto:q.correta};
   await salvarLocal(); // nunca assume persistência sem confirmação local
-  if(indiceQuestao===i)renderQuestoes();agendarSync();
+  if(indiceQuestao===i)renderQuestoes();atualizarEstadoLocal();
  }catch(e){delete confirmacoes[q.id];notice('⚠️ Não foi possível salvar no dispositivo: '+e.message);if(indiceQuestao===i)renderQuestoes();}
  finally{confirmando.delete(q.id);}
 }
 let falhaSalvamento=false;
 let finalizando=false;
-function finalizar(btn){if(!tentativa||finalizando)return;if(!confirm('Finalizar agora? Questões em branco serão contabilizadas como não respondidas.'))return;
- finalizando=true;return acaoBotao(btn,'Finalizando...',async()=>{
-  clearTimeout(syncTimer);if(syncPromise)await syncPromise;
-  if(!navigator.onLine&&Object.values(confirmacoes).some(r=>!r.salvo))throw Error('Sem internet. As respostas estão guardadas neste dispositivo.');
-  for(let n=0;n<3;n++){ 
-   if(!Object.values(confirmacoes).some(r=>!r.salvo))break;
-   await sincronizar();
-   if(syncPromise)await syncPromise;
-  }
-  if(Object.values(confirmacoes).some(r=>!r.salvo))throw Error('Ainda existem respostas pendentes. Conecte-se à internet e tente finalizar novamente.');
-  const id=tentativa,r=await api('finalizarQuiz',token,id);
-  await limparLocal(id).catch(()=>{});tentativa=null;show('fimArea');
+function finalizar(btn){
+ if(!tentativa||finalizando)return;
+ if(!confirm('Finalizar agora? Questões em branco serão contabilizadas como não respondidas. As respostas serão enviadas ao servidor neste momento.'))return;
+ finalizando=true;
+ let concluida=false;
+ return acaoBotao(btn,'Enviando resultado...',async()=>{
+  if(confirmando.size)throw Error('Existe uma resposta sendo salva no dispositivo. Tente finalizar novamente.');
+  if(!navigator.onLine)throw Error('Sem internet. Suas respostas continuam neste dispositivo. Reconecte-se para finalizar.');
+  // Assegura que o último estado também ficou persistido localmente.
+  await salvarLocal();
+  const id=tentativa;
+  const itens=Object.entries(confirmacoes).map(([questaoId,r])=>({questaoId,indice:r.indice}));
+  atualizarSync('⟳ Enviando '+itens.length+' resposta(s) e finalizando...');
+  // ÚNICA chamada de gravação de respostas; servidor valida e corrige o teste.
+  const r=await api('finalizarQuizComRespostas',token,id,itens);
+  await limparLocal(id).catch(()=>{});
+  tentativa=null;concluida=true;show('fimArea');
   $('fimDescricao').textContent=r.materia+' — '+r.conteudo;
   $('fimStats').innerHTML=[['Total',r.total],['Respondidas',r.respondidas],['Acertos',r.acertos],['Erros',r.erros],['Em branco',r.naoRespondidas],['Saídas da aba',r.saidasDeAba],['Tempo (min)',r.duracaoMinutos??'—'],['Início',formatarDataHoraQuiz(r.inicio)],['Término',formatarDataHoraQuiz(r.fim)]].map(x=>'<div class="stat"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('');
- }).finally(()=>{finalizando=false});}
+ }).finally(()=>{finalizando=false;if(!concluida&&tentativa)atualizarEstadoLocal();});
+}
 async function voltarAluno(btn){await acaoBotao(btn,'Carregando...',async()=>{await carregarQuizzes();show('alunoArea')})}
-window.addEventListener('online',()=>{if(tentativa)agendarSync(true)});
+window.addEventListener('online',()=>{if(tentativa)atualizarEstadoLocal();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&tentativa&&user?.perfil==='aluno'){api('registrarSaida',token,tentativa).catch(()=>{})}});
 window.addEventListener('beforeunload',e=>{if(tentativa){e.preventDefault();e.returnValue=''}});
 if(token)run(async()=>{user=await api('perfilAtual',token);header();await home()});
