@@ -3,9 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#070e17">
+<meta name="theme-color" content="#070c13">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-startup-image" href="splash/splash-1290x2796.jpg" media="(device-width:430px) and (device-height:932px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1179x2556.jpg" media="(device-width:393px) and (device-height:852px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1284x2778.jpg" media="(device-width:428px) and (device-height:926px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1170x2532.jpg" media="(device-width:390px) and (device-height:844px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1125x2436.jpg" media="(device-width:375px) and (device-height:812px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1242x2688.jpg" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-828x1792.jpg" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1242x2208.jpg" media="(device-width:414px) and (device-height:736px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-750x1334.jpg" media="(device-width:375px) and (device-height:667px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-2048x2732.jpg" media="(device-width:1024px) and (device-height:1366px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1668x2388.jpg" media="(device-width:834px) and (device-height:1194px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1640x2360.jpg" media="(device-width:820px) and (device-height:1180px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1620x2160.jpg" media="(device-width:810px) and (device-height:1080px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1668x2224.jpg" media="(device-width:834px) and (device-height:1112px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1536x2048.jpg" media="(device-width:768px) and (device-height:1024px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Curso APH">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Curso APH Atendimento Inicial — biblioteca de videoaulas organizada por conteúdo geral.">
-<title>Curso APH — Atendimento Inicial</title>
+<title>Curso APH de acordo com PHTLS 10</title>
 <link rel="preconnect" href="https://i.ytimg.com" crossorigin>
 <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin>
 <style>
@@ -125,6 +147,8 @@ body.drawer-open .drawer{transform:none;box-shadow:var(--shadow)}
 .hero{min-height:0;padding-bottom:210px}.hero-visual{height:46%;width:62%;opacity:.8}.hero-content{padding-bottom:0}
 .player-controls{display:grid;grid-template-columns:1fr 1fr}#watchedBtn{grid-column:1/-1;order:-1}.player-spacer{display:none}.control-btn{min-height:48px}
 .playlist{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}}
+#installBtn{margin-top:6px;background:rgba(249,190,67,.12);color:#ffd986}#installBtn svg{color:var(--yellow)}
+@media(display-mode:standalone){#installBtn{display:none!important}.topbar{padding-top:env(safe-area-inset-top,0px)}}
 </style>
 </head>
 <body data-view="home">
@@ -142,6 +166,7 @@ body.drawer-open .drawer{transform:none;box-shadow:var(--shadow)}
 <div class="dr-ov"><div class="row"><span>Progresso geral</span><b id="drPct">0%</b></div><div class="qbar"><u id="drFill" style="width:0"></u></div></div>
 <button class="dr-btn" data-view-btn="home" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg> Início</button>
 <button class="dr-btn" data-view-btn="progress" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg> Meu progresso</button>
+<button class="dr-btn" id="installBtn" type="button" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg> Instalar aplicativo</button>
 <div class="dr-label">MÓDULOS</div><div id="drMods"></div>
 </aside>
 <main>
@@ -150,7 +175,7 @@ body.drawer-open .drawer{transform:none;box-shadow:var(--shadow)}
  <div class="hero-content">
   <div class="eyebrow">Treinamento em atendimento pré-hospitalar</div>
   <h1>Curso APH<br><span class="acc">Atendimento</span><br>Inicial</h1>
-  <p class="hero-desc">Conhecimento para agir com preparo. Explore as videoaulas organizadas por tema e acompanhe sua evolução em cada etapa do curso.</p>
+  <p class="hero-desc">Conhecimento para aprender a pensar. Explore as videoaulas organizadas por tema e acompanhe sua evolução em cada etapa do curso.</p>
   <div class="hero-tags"><span class="hero-tag"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="15" rx="2"/><path d="m8 6 2-3h4l2 3"/></svg> 96 videoaulas</span><span class="hero-tag"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/></svg> 5 módulos</span><span class="hero-tag"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg> Progresso salvo</span></div>
   <div class="hero-buttons"><a class="btn btn-primary" href="#catalogo"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Explorar aulas</a><button class="btn btn-secondary" id="continueBtn" type="button" hidden>Continuar assistindo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button></div>
  </div>
@@ -159,7 +184,7 @@ body.drawer-open .drawer{transform:none;box-shadow:var(--shadow)}
 <div class="stats" aria-label="Estatísticas do curso"><div class="stat"><div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 8 6 4-6 4z"/></svg></div><div class="stat-copy"><div class="stat-num">96</div><div class="stat-lbl">Vídeos disponíveis</div></div></div><div class="stat"><div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4zM8 9h8M8 13h8M8 17h5"/></svg></div><div class="stat-copy"><div class="stat-num">05</div><div class="stat-lbl">Conteúdos gerais</div></div></div><div class="stat"><div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6 9 17l-5-5"/></svg></div><div class="stat-copy"><div class="stat-num" id="statsWatched">0</div><div class="stat-lbl">Aulas concluídas</div></div></div></div>
 </div></section>
 <section class="catalog" id="catalogo"><div class="container">
-<div class="section-kicker">Biblioteca do curso</div><h2 class="section-heading">Sua próxima aula começa aqui</h2><p class="section-sub">Escolha um assunto geral para visualizar os vídeos desse módulo. Clique em uma miniatura para assistir, como em um catálogo de streaming.</p>
+<div class="section-kicker">Biblioteca do curso</div><h2 class="section-heading">Sua próxima aula começa aqui</h2><p class="section-sub">Escolha um assunto geral para visualizar os vídeos desse módulo. Clique em uma miniatura para assistir.</p>
 <div class="filter-panel"><div class="field-wrap"><label class="field-label" for="moduleSelect">Selecione o conteúdo geral</label><div class="select-box"><select id="moduleSelect"><option value="">Escolher módulo de estudo...</option></select><span class="arr"><svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></span></div></div><div class="field-wrap search-wrap" id="searchWrap"><label class="field-label" for="searchInput">Pesquisar videoaulas</label><div class="input-holder"><svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input type="search" id="searchInput" placeholder="Buscar por título da aula..." autocomplete="off"></div></div></div>
 <div class="empty-state" id="emptyState"><div class="empty-head"><div class="empty-head-icon"><svg class="star-svg" style="width:32px;height:32px;color:#62c4e8"><use href="#star-of-life"/></svg></div><div><h3>Por onde deseja começar?</h3><p>Selecione um assunto na lista acima ou escolha um dos módulos abaixo para ver as videoaulas.</p></div></div><div class="quick-grid" id="quickGrid"></div></div>
 <div class="module-panel" id="modulePanel"><div class="module-title-row"><div class="module-info-area"><div class="section-kicker" id="moduleKicker">Módulo 01</div><h3 class="module-heading" id="moduleHeading"></h3><p class="module-caption" id="moduleCaption"></p>
@@ -169,8 +194,8 @@ body.drawer-open .drawer{transform:none;box-shadow:var(--shadow)}
 <button type="button" class="duration-edit-btn" id="durationEditBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4L16.5 3.5Z"/></svg> Informar durações</button>
 </div></div><div class="module-progress"><div class="progress-meta"><span>Progresso do módulo</span><strong id="modulePercent">0%</strong></div><div class="progress-track"><div class="progress-fill" id="moduleFill"></div></div></div></div><div class="cards-grid" id="cardsGrid"></div><div class="empty-search" id="emptySearch"><strong>Nenhuma aula encontrada</strong>Experimente pesquisar por outro termo.</div></div>
 </div></section>
-<section class="course-progress" id="progresso"><div class="container"><div class="progress-box"><div><div class="section-kicker">Seu ritmo, sua evolução</div><h3>Continue de onde parou</h3><p>Marque as aulas como concluídas ao assistir.<br>O progresso fica salvo neste navegador.</p></div><div class="overall-right"><div class="overall-summary"><span>Progresso geral do curso</span><b id="overallPercent">0%</b></div><div class="progress-track"><div class="progress-fill" id="overallFill"></div></div><div class="overall-summary"><span id="overallText">0 de 96 aulas concluídas</span><span>Meta: 100%</span></div></div></div><div class="prog-mods" id="progMods"></div></div></section>
-</main><footer class="footer"><div class="container footer-inner"><div class="footer-brand"><svg class="star-svg"><use href="#star-of-life"/></svg> Curso APH · Atendimento Inicial</div><div>Biblioteca organizada a partir da planilha Curso APH</div><div>Os vídeos são reproduzidos pelo YouTube.</div></div></footer>
+<section class="course-progress" id="progresso"><div class="container"><div class="progress-box"><div><div class="section-kicker">Seu ritmo, sua evolução</div><h3>Continue de onde parou</h3><p>Marque as aulas como concluídas ao assistir.<br>O progresso fica salvo neste dispositivo.</p></div><div class="overall-right"><div class="overall-summary"><span>Progresso geral do curso</span><b id="overallPercent">0%</b></div><div class="progress-track"><div class="progress-fill" id="overallFill"></div></div><div class="overall-summary"><span id="overallText">0 de 96 aulas concluídas</span><span>Meta: 100%</span></div></div></div><div class="prog-mods" id="progMods"></div></div></section>
+</main><footer class="footer"><div class="container footer-inner"><div class="footer-brand"><svg class="star-svg"><use href="#star-of-life"/></svg> Curso APH · Atendimento Inicial</div><div>Desenvolvido por ®Sgt R.Cunha</div><div>Necessário conexão de internet para assistir às aulas.</div></div></footer>
 <div class="modal" id="playerModal" role="dialog" aria-modal="true" aria-labelledby="playerTitle" aria-hidden="true"><div class="modal-card"><div class="modal-header"><div style="min-width:0"><div class="lesson-breadcrumb" id="playerBreadcrumb"></div><h3 id="playerTitle"></h3></div><button class="icon-btn" id="closePlayer" title="Fechar vídeo" aria-label="Fechar vídeo"><svg width="19" height="19" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="modal-main"><div class="player-left"><div class="iframe-wrap" id="iframeWrap"></div><div class="player-info"><div><h4 id="lessonTitle"></h4><p id="lessonMeta"></p></div><a id="youtubeLink" class="youtube-link" target="_blank" rel="noopener noreferrer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3h7v7M10 14 21 3"/><path d="M20 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7"/></svg> Abrir no YouTube</a></div><div class="player-controls"><button class="control-btn" id="prevBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm12 0v12l-9-6z"/></svg> Anterior</button><button class="control-btn" id="watchedBtn"><svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="m4 12 5 5L20 6"/></svg> Marcar como concluída</button><span class="player-spacer"></span><button class="control-btn primary" id="nextBtn">Próxima aula <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6v12l9-6z"/></svg></button></div></div><aside class="playlist"><div class="playlist-top"><div class="playlist-title">Aulas deste módulo</div><div class="playlist-sub" id="playlistSubtitle"></div></div><div id="playlistItems"></div></aside></div></div></div>
 <div class="duration-modal" id="durationModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="durationModalTitle">
  <div class="duration-card">
@@ -319,6 +344,16 @@ document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');i
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 let tx=null;qs('#drawer').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});qs('#drawer').addEventListener('touchend',e=>{if(tx!==null&&e.changedTouches[0].clientX-tx<-60)closeDrawer();tx=null},{passive:true});
 setView('home',true);
+// ===== PWA =====
+(function(){let dip=null;const btn=qs('#installBtn');
+ const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
+ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;if(!standalone)btn.hidden=false});
+ if(ios&&!standalone)btn.hidden=false;
+ btn.addEventListener('click',async()=>{if(dip){dip.prompt();await dip.userChoice;dip=null;btn.hidden=true;closeDrawer()}else{closeDrawer();showToast('No iPhone: toque em Compartilhar e depois em "Adicionar à Tela de Início"')}});
+ window.addEventListener('appinstalled',()=>{btn.hidden=true;showToast('Aplicativo instalado!')});
+ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+})();
 updateProgress();refreshTimeLabels();
 </script>
 </body></html>
